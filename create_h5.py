@@ -47,23 +47,27 @@ def create_h5(path):
         for i in range(0,len(ship)):
             d1[i] = cv2.imread(str(ship[i]))
 
+        print(d1.name)
         g2= f.create_group('no_ships')
         d2 = g2.create_dataset('data',h5_no_ship_shape)
         for i in range(0,len(no_ship)):
             d2[i] = cv2.imread(no_ship[i])
+        print(d2.name)
+        print(d2.shape)
         f.close()
 
 def load_dataset():
     with h5.File('data.hdf5', "r") as f:
         positive_cases = np.array(f['ships']['data'][:])
         negative_cases = np.array(f['no_ships']['data'][:])
+        print("The hdf5 file acts as a big dictionary:",f.keys())
+        print("The keys in hdf5 file are called sub-groups:",f['ships'].keys())
+        print("The shape of the positive cases is:",positive_cases.shape)
+        print("The shape of the negative cases is:",negative_cases.shape)
+
         f.close()
 
     return positive_cases, negative_cases
 
-
-
-
-
-create_h5('./shipsnet/')
-print(load_dataset())
+##create_h5('./shipsnet/')
+load_dataset()
