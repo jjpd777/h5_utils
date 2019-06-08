@@ -40,28 +40,31 @@ def create_h5(path):
     dim1,dim2,dim3 = img_dim[0],img_dim[1],img_dim[2]
     h5_ship_shape = (len(ship),dim1,dim2,dim3)
     h5_no_ship_shape = (len(no_ship),dim1,dim2,dim3)
-
+    print("The shape of the ship dataset is:", h5_ship_shape)
+    print("The shape of the no_ship dataset is:", h5_no_ship_shape)
     with h5.File('data.hdf5', 'w') as f:
         g1 = f.create_group('ships')
         d1 = g1.create_dataset('data',h5_ship_shape)
         for i in range(0,len(ship)):
             d1[i] = cv2.imread(str(ship[i]))
 
-        print(d1.name)
         g2= f.create_group('no_ships')
         d2 = g2.create_dataset('data',h5_no_ship_shape)
         for i in range(0,len(no_ship)):
             d2[i] = cv2.imread(no_ship[i])
-        print(d2.name)
-        print(d2.shape)
+
+        print("The name of the ships dataset is ",d1.name)
+        print("The name of the no_ships dataset is ",d2.name)
         f.close()
 
 def load_dataset():
     with h5.File('data.hdf5', "r") as f:
-        positive_cases = np.array(f['ships']['data'][:])
-        negative_cases = np.array(f['no_ships']['data'][:])
-        print("The hdf5 file acts as a big dictionary:",f.keys())
-        print("The keys in hdf5 file are called sub-groups:",f['ships'].keys())
+        print("The hdf5 file acts as a big dictionary where the groups are the keys:",f.keys())
+
+        print("Each group has a dataset associated with it:",f['ships'].keys(),f['no_ships'].keys())
+        positive_cases = f['ships']['data'][:]
+        negative_cases = f['no_ships']['data'][:]
+        print("Images are stored as numpy arrays:",type(positive_cases))
         print("The shape of the positive cases is:",positive_cases.shape)
         print("The shape of the negative cases is:",negative_cases.shape)
 
@@ -69,5 +72,5 @@ def load_dataset():
 
     return positive_cases, negative_cases
 
-##create_h5('./shipsnet/')
-load_dataset()
+create_h5('./shipsnet/')
+##load_dataset()
