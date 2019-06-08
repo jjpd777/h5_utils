@@ -67,7 +67,7 @@ def load_dataset():
         print("Images are stored as numpy arrays:",type(positive_cases))
         print("The shape of the positive cases is:",positive_cases.shape)
         print("The shape of the negative cases is:",negative_cases.shape)
-
+        print("Checking one element of each dataset",d1[0].shape,d2[0].shape)
         f.close()
 
     return positive_cases, negative_cases
